@@ -1,74 +1,95 @@
 #include "shell.h"
+int _fprintf(FILE *stream, const char *format, ...);
 
 /**
  * _fprintf - A function that handles error output.
- * @stream: The file descriptor (not used in this implementation).
- * @format: Format specifier arguments.
+ * @stream: The file descriptor.
+ * @format: format specifer arguments.
  *
- * Return: The number of characters printed (excluding null byte).
+ * Return: The length of string
  */
-int _fprintf(FILE *stream, const char *format, ...);
+
 int _fprintf(FILE *stream, const char *format, ...)
 {
+	int i;
+
 	int printed_chars = 0;
-	va_list args;
 
-	va_start(args, format);
+	va_list specifier_args;
 
-	while (*format != '\0')
+	(void)stream;
+
+	va_start(specifier_args, format);
+
+	for (i = 0; format[i] != '\0'; i++)
 	{
-		if (*format == '%')
+		if (format[i] == '%')
 		{
-			format++;
+			i = i + 1;
 
-			if (*format == '\0')
-				break;
-
-			if (*format == 'c')
-			{
-				char c_val = va_arg(args, int);
-
-				err_putchar(c_val);
-				printed_chars++;
-			}
-			else if (*format == 's')
-			{
-				char *s_val = va_arg(args, char *);
-				int len = 0;
-
-				while (s_val[len] != '\0')
-				{
-					err_putchar(s_val[len]);
-					len++;
-				}
-				printed_chars += len;
-			}
-			else if (*format == 'd')
-			{
-				int val = va_arg(args, int);
-				int len = _integer_length(val);
-
-				print_integer(val);
-				printed_chars += len;
-			}
-			else
+			if (format[i] == '%')
 			{
 				err_putchar('%');
-				err_putchar(*format);
-				printed_chars += 2;
+			}
+			else if (format[i] == 'c')
+			{
+				char c_val = va_arg(specifier_args, int);
+
+				if (c_val)
+				{
+					err_putchar(c_val);
+					printed_chars = printed_chars + 1;
+				}
+
+			}
+			else if (format[i] == 's')
+			{
+				char *_val = va_arg(specifier_args, char *);
+
+				int _idx = 0;
+
+				int _len = 0;
+
+				for (_idx = 0; _val[_idx] != '\0'; _idx++)
+				{
+					err_putchar(_val[_idx]);
+				}
+
+				while (*_val != '\0')
+				{
+					_len = _len + 1;
+
+					_val = _val + 1;
+				}
+
+				printed_chars = printed_chars + _len;
+			}
+			else if (format[i] == 'd')
+			{
+				int len = 0;
+
+				int val = va_arg(specifier_args, int);
+
+				if (val == 0)
+				{
+					return (-1);
+				}
+
+				len = _integer_length(val);
+
+				print_integer(val);
+				printed_chars = printed_chars + len;
 			}
 		}
 		else
 		{
-			err_putchar(*format);
-			printed_chars++;
+			err_putchar(format[i]);
+			printed_chars = printed_chars + 1;
 		}
-
-		format++;
 	}
 
-	va_end(args);
+	va_end(specifier_args);
 
 	return (printed_chars);
-}
 
+}
