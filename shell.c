@@ -15,7 +15,7 @@ int main(void)
 
 	char **cmd_args;
 
-	char *_prompt = "Marv&Dan$ ", *token;
+	char *_prompt = "Gab&Rap$ ", *token;
 
 	int _idx = 0;
 

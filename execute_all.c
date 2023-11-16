@@ -1,18 +1,18 @@
 #include "shell.h"
-void execute_builtin_command(char **command, char *valget);
 
 /**
- * execute_builtin_command - A function that handles builtin commands
+ * execute_builtin_command - Handles built-in commands.
+ * @command: The command arguments to be checked.
+ * @valget: The getline value argument to free.
  *
- * @command: this is the command arguments to be checked.
- * @valget: getline value argument to  free.
  * Return: Always 0
+ *
  */
 
+void execute_builtin_command(char **command, char *valget);
 void execute_builtin_command(char **command, char *valget)
 {
 	char executable_file[MAX_INPUT_SIZE];
-
 	char *file_path = "/bin/";
 
 	if (_strcmp(command[0], "exit") == 0)
@@ -20,20 +20,16 @@ void execute_builtin_command(char **command, char *valget)
 		if (command[1] != NULL)
 		{
 			char *endptr;
-
 			long status = strtol(command[1], &endptr, 10);
 
 			if (_strcmp(command[1], "-98") == 0)
 			{
 				char *a = command[0];
-
 				char *b = command[1];
-
 				int n = 1;
-
 				char *ms = "./hsh: %d: %s: Illegal number: %s\n";
+	_fprintf(stderr, ms, n, a, b);
 
-				_fprintf(stderr, ms, n, a, b);
 				free(valget);
 				free(command);
 				exit(2);
@@ -48,11 +44,8 @@ void execute_builtin_command(char **command, char *valget)
 			else
 			{
 				char *a = command[0];
-
 				char *b = command[1];
-
 				int n = 1;
-
 				char *ms = "./hsh: %d: %s: invalid input: %s\n";
 
 				_fprintf(stderr, ms, n, a, b);
@@ -79,19 +72,19 @@ void execute_builtin_command(char **command, char *valget)
 	}
 	else if (_strcmp(command[0], "setenv") == 0)
 	{
-		/*implement*/
+		/* To be implemented */
 	}
 	else if (_strcmp(command[0], "unsetenv") == 0)
 	{
-		/*implement*/
+		/* To be implemented */
 	}
 	else if (_strcmp(command[0], "cd") == 0)
 	{
-		/*implement*/
+		/* To be implemented */
 	}
 	else if (_strcmp(command[0], "#") == 0)
 	{
-		/*NIL*/
+		/* Do nothing for comments */
 	}
 	else
 	{
@@ -134,3 +127,4 @@ void execute_builtin_command(char **command, char *valget)
 		}
 	}
 }
+

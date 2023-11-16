@@ -1,66 +1,69 @@
 #include "shell.h"
+#include <stdarg.h>
+#include <stdlib.h>
+
 /**
- * _printf - Custom printf function that handles %c and %s format specifiers.
+ * _printf - Custom printf function that prints to standard output.
  * @format: Format specifier for characters to be printed.
- * Return: Number of characters printed successfully (excluding null byte).
+ *
+ * Return: Number of characters printed successfully.
+ *
  */
 int _printf(const char *format, ...);
 int _printf(const char *format, ...)
 {
-	int printed_chars = 0;
-	va_list args;
+	int fmt_idx, printed_chars = 0;
+	va_list fmt_spec_args;
 
-	va_start(args, format);
+	va_start(fmt_spec_args, format);
 
 	if (format == NULL)
 		return (-1);
 
-	while (*format != '\0')
+	for (fmt_idx = 0; format[fmt_idx] != '\0'; fmt_idx++)
 	{
-		if (*format == '%')
+		if (format[fmt_idx] == '%')
 		{
-			format++;
+			fmt_idx++;
 
-			if (*format == '\0')
-				break;
-
-			if (*format == 'c')
-			{
-				char chr_val = va_arg(args, int);
-
-				_putchar(chr_val);
-				printed_chars++;
-			}
-			else if (*format == 's')
-			{
-				char *str_val = va_arg(args, char *);
-				int len = 0;
-
-				while (str_val[len] != '\0')
-				{
-					_putchar(str_val[len]);
-					len++;
-				}
-
-				printed_chars += len;
-			}
-			else
+			if (format[fmt_idx] == '%')
 			{
 				_putchar('%');
-				_putchar(*format);
-				printed_chars += 2;
+				printed_chars++;
+			}
+			else if (format[fmt_idx] == 'c')
+			{
+				char chr_val = va_arg(fmt_spec_args, int);
+
+				if (chr_val)
+				{
+					_putchar(chr_val);
+					printed_chars++;
+				}
+				else
+				{
+					exit(-1);
+				}
+			}
+			else if (format[fmt_idx] == 's')
+			{
+				char *_val = va_arg(fmt_spec_args, char *);
+
+				for (; *_val; _val++)
+				{
+					_putchar(*_val);
+					printed_chars++;
+				}
 			}
 		}
 		else
 		{
-			_putchar(*format);
+			_putchar(format[fmt_idx]);
 			printed_chars++;
 		}
-
-		format++;
 	}
 
-	va_end(args);
+	va_end(fmt_spec_args);
 
 	return (printed_chars);
 }
